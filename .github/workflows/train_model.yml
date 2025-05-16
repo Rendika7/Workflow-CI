@@ -24,4 +24,4 @@ jobs:
         run: |
           source $(conda info --base)/etc/profile.d/conda.sh
           conda activate depression_env
-          mlflow run MLProject -P data_path=MLProject/student-depression-dataset_preprocessing.csv
+          mlflow run MLProject -P data_path=student-depression-dataset_preprocessing.csv
