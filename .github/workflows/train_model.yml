@@ -22,17 +22,21 @@ jobs:
           environment-file: MLProject/conda.yaml
           use-mamba: true
 
-      - name: Start MLflow Tracking Server
-        run: |
-          mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns --host 127.0.0.1 --port 5000 &
-          sleep 10
-
-      - name: Run MLflow Project training
+      - name: Start MLflow server and run training
         env:
           DAGSHUB_USER_TOKEN: ${{ secrets.DAGSHUB_USER_TOKEN }}
+          MLFLOW_TRACKING_URI: http://127.0.0.1:5000
         run: |
           source $(conda info --base)/etc/profile.d/conda.sh
           conda activate depression_env
+
+          # Start MLflow server di background
+          mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns --host 127.0.0.1 --port 5000 &
+
+          # Tunggu sampai server siap (simple sleep, bisa ditingkatkan dengan check port)
+          sleep 15
+
+          # Run MLflow project dengan tracking uri ke server lokal
           mlflow run MLProject -P data_path=student-depression-dataset_preprocessing.csv
 
       - name: Commit and push mlruns to repo
