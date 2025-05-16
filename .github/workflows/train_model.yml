@@ -1,0 +1,24 @@
+name: Train Model Workflow
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup conda environment
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          python-version: 3.8
+          activate-environment: depression_env
+          environment-file: MLProject/conda.yaml
+          use-mamba: true
+      - name: Run MLflow Project training
+        run: |
+          mlflow run MLProject -P data_path=MLProject/student-depression-dataset_preprocessing.csv
