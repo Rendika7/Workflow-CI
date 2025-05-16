@@ -61,7 +61,14 @@ def main(data_path):
     }
 
     # Initialize dagshub setup
-    dagshub.init(repo_owner='Rendika7', repo_name='Eksperimen_SML_Rendika-nurhartanto-suharto', mlflow=True)
+    dagshub.init(
+        repo_owner='Rendika7',
+        repo_name='Eksperimen_SML_Rendika-nurhartanto-suharto',
+        mlflow=True,
+        token=os.getenv('DAGSHUB_TOKEN')
+    )
+
+
 
     # Set MLflow tracking URI (remote DagsHub)
     mlflow.set_tracking_uri("https://dagshub.com/Rendika7/Eksperimen_SML_Rendika-nurhartanto-suharto.mlflow")

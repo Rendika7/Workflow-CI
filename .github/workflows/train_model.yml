@@ -21,6 +21,8 @@ jobs:
           use-mamba: true
       - name: Run MLflow Project training
         shell: bash
+        env:
+          DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
         run: |
           source $(conda info --base)/etc/profile.d/conda.sh
           conda activate depression_env
