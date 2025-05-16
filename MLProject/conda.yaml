@@ -6,4 +6,10 @@ dependencies:
   - python=3.8
   - pip
   - pip:
-      - -r requirements.txt
+      - pandas
+      - scikit-learn
+      - mlflow
+      - xgboost
+      - lightgbm
+      - dagshub
+      - numpy
