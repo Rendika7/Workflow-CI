@@ -24,7 +24,6 @@ jobs:
 
       - name: Start MLflow server and run training
         env:
-          DAGSHUB_USER_TOKEN: ${{ secrets.DAGSHUB_USER_TOKEN }}
           MLFLOW_TRACKING_URI: http://127.0.0.1:5000
         run: |
           source $(conda info --base)/etc/profile.d/conda.sh

@@ -28,7 +28,8 @@ def main(data_path):
 
     # Set MLflow tracking URI and experiment name
     # mlflow.set_tracking_uri("https://dagshub.com/Rendika7/Eksperimen_SML_Rendika-nurhartanto-suharto.mlflow")
-    # mlflow.set_tracking_uri("http://127.0.0.1:5000")
+    
+    mlflow.set_tracking_uri("http://127.0.0.1:5000")  # Local MLflow server
     
     # Pastikan tidak ada run aktif saat mulai
     if mlflow.active_run():
