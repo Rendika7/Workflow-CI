@@ -29,8 +29,14 @@ jobs:
           source $(conda info --base)/etc/profile.d/conda.sh
           conda activate depression_env
 
+          # Start MLflow server di background
+          mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns --host 127.0.0.1 --port 5000 &
+
+          # Tunggu sampai server siap (simple sleep, bisa ditingkatkan dengan check port)
+          sleep 15
+
           # Run MLflow project dengan tracking uri ke server lokal
-          mlflow run MLProject -P data_path=student-depression-dataset_preprocessing.csv
+          mlflow run MLProject -P data_path=student-depression-dataset_preprocessing.csv --backend local
 
       - name: Commit and push mlruns to repo
         env:
