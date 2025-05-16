@@ -19,14 +19,15 @@ import dagshub
 
 
 def main(data_path):
-    # # Initialize dagshub setup (token read automatically from env var DAGSHUB_USER_TOKEN)
-    # dagshub.init(
-    #     repo_owner='Rendika7',
-    #     repo_name='Eksperimen_SML_Rendika-nurhartanto-suharto',
-    #     mlflow=True
-    # )
+    # Initialize dagshub setup (token read automatically from env var DAGSHUB_USER_TOKEN)
+    dagshub.init(
+        repo_owner='Rendika7',
+        repo_name='Eksperimen_SML_Rendika-nurhartanto-suharto',
+        mlflow=True
+    )
     
-    mlflow.set_tracking_uri("http://127.0.0.1:5000")  # Local MLflow server
+    
+    mlflow.set_tracking_uri("https://dagshub.com/Rendika7/Eksperimen_SML_Rendika-nurhartanto-suharto.mlflow")  # This points MLflow to a remote MLflow tracking server hosted by DagsHub (a cloud platform).
     mlflow.set_experiment("Model_Training_Default_Parameters")
 
     # Load the dataset
