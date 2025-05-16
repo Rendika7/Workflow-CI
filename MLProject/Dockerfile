@@ -1,11 +1,12 @@
 FROM continuumio/miniconda3
 
 WORKDIR /app
-COPY conda.yaml .
+
+COPY MLProject/conda.yaml .
 RUN conda env create -f conda.yaml
 
-SHELL ["conda", "run", "-n", "depression_env", "/bin/bash", "-c"]
+ENV PATH /opt/conda/envs/mlproject-env/bin:$PATH
 
-COPY . /app
+COPY MLProject/ .
 
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "depression_env", "python", "modelling.py"]
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "mlproject-env", "python", "modelling.py", "--data_path", "student-depression-dataset_preprocessing.csv"]
