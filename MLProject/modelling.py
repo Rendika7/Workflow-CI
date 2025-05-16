@@ -1,6 +1,8 @@
 import argparse
 import pandas as pd
 import numpy as np
+import shutil
+import os
 import mlflow
 import mlflow.sklearn
 from mlflow.tracking import MlflowClient
@@ -279,3 +281,26 @@ if __name__ == "__main__":
     parser.add_argument('--data_path', type=str, default='student-depression-dataset_preprocessing.csv')
     args = parser.parse_args()
     main(args.data_path)
+
+# Copy remote artifacts from DAGSHub to local mlruns (if needed)
+# In CI this simulates local artifacts for git tracking
+if not os.path.exists("mlruns"):
+    os.makedirs("mlruns")
+
+# Export MLflow runs locally by re-logging (simple simulation)
+local_tracking_uri = "file:./mlruns"
+client = MlflowClient()
+
+# Download all runs and copy artifact files
+experiments = client.list_experiments()
+for exp in experiments:
+    runs = client.search_runs(exp.experiment_id)
+    for run in runs:
+        run_id = run.info.run_id
+        try:
+            artifact_uri = run.info.artifact_uri.replace("file://", "")
+            dst = os.path.join("mlruns", exp.experiment_id, run_id)
+            if os.path.exists(artifact_uri):
+                shutil.copytree(artifact_uri, dst, dirs_exist_ok=True)
+        except Exception as e:
+            print(f"❗ Failed copying artifact for run {run_id}: {e}")

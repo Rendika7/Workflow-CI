@@ -24,6 +24,8 @@ jobs:
           environment-file: MLProject/conda.yaml
           use-mamba: true
 
+
+          
       # - name: Start MLflow server and run training
       #   env:
       #     MLFLOW_TRACKING_URI: http://127.0.0.1:5000
@@ -41,7 +43,9 @@ jobs:
       #     python MLProject/modelling.py --data_path MLProject/student-depression-dataset_preprocessing.csv
 
 
-      - name: Run training with DagsHub MLflow tracking
+
+
+      - name: Run training with DAGSHub MLflow tracking
         env:
           MLFLOW_TRACKING_URI: https://dagshub.com/Rendika7/Eksperimen_SML_Rendika-nurhartanto-suharto.mlflow
           DAGSHUB_USER_TOKEN: ${{ secrets.DAGSHUB_USER_TOKEN }}
@@ -52,24 +56,15 @@ jobs:
 
       - name: Commit and push mlruns to repo
         run: |
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git add mlruns/
-          git diff --cached --quiet || git commit -m "Save mlruns from CI run"
-          git push
-
-          
-      # - name: Commit and push mlruns to repo (optional if you save artifacts locally)
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      #     GIT_USER: ${{ secrets.username }}
-      #     GIT_EMAIL: ${{ secrets.email }}
-      #   run: |
-      #     git config user.name "$GIT_USER"
-      #     git config user.email "$GIT_EMAIL"
-      #     git add mlruns/
-      #     git diff --cached --quiet || git commit -m "Save mlruns from CI run"
-      #     git push origin main
+          if [ -d "mlruns" ]; then
+            git config user.name "${{ github.actor }}"
+            git config user.email "${{ github.actor }}@users.noreply.github.com"
+            git add mlruns/
+            git diff --cached --quiet || git commit -m "Save mlruns from CI run"
+            git push
+          else
+            echo "❗ No mlruns/ directory found to commit."
+          fi
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -79,5 +74,5 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t yourdockerhubusername/student-depression-model:latest .
-          docker push yourdockerhubusername/student-depression-model:latest
+          docker build -t rendika7/student-depression-model:latest .
+          docker push rendika7/student-depression-model:latest
