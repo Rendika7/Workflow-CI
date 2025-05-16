@@ -20,5 +20,8 @@ jobs:
           environment-file: MLProject/conda.yaml
           use-mamba: true
       - name: Run MLflow Project training
+        shell: bash
         run: |
+          source $(conda info --base)/etc/profile.d/conda.sh
+          conda activate depression_env
           mlflow run MLProject -P data_path=MLProject/student-depression-dataset_preprocessing.csv
