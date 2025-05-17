@@ -40,7 +40,7 @@ jobs:
 
       #     # Run MLflow project dengan tracking uri ke server lokal
       #     python MLProject/modelling.py --data_path MLProject/student-depression-dataset_preprocessing.csv
-
+      
 
       - name: Run training with DAGSHub MLflow tracking
         env:
@@ -50,7 +50,6 @@ jobs:
           source $(conda info --base)/etc/profile.d/conda.sh
           conda activate depression_env
           python MLProject/modelling.py --data_path MLProject/student-depression-dataset_preprocessing.csv
-          
 
       - name: Commit and push mlruns to repo
         run: |
