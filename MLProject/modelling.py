@@ -24,12 +24,8 @@ from sklearn.preprocessing import LabelEncoder
 
 
 def main(data_path):
-    # 1️⃣MLflow config [Cloud Service Dagshub] (token read automatically from env var DAGSHUB_USER_TOKEN)
-    dagshub.init(repo_owner='Rendika7', repo_name='student-depression-mlflow', mlflow=True)
-    mlflow.set_tracking_uri("https://dagshub.com/Rendika7/student-depression-mlflow.mlflow")
-
-    # # 2️⃣MLflow config [LOCAL]
-    # mlflow.set_tracking_uri("http://127.0.0.1:5000")
+    # Pakai local MLflow tracking di folder ./mlruns
+    mlflow.set_tracking_uri("file://" + os.path.abspath("mlruns"))
 
     # Set experiment name
     mlflow.set_experiment("Model_Training_Default_Parameters")

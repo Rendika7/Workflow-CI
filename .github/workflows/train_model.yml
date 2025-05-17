@@ -10,48 +10,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true
 
       - name: Setup conda environment
         uses: conda-incubator/setup-miniconda@v2
         with:
-          auto-update-conda: true
           python-version: 3.8
           activate-environment: depression_env
           environment-file: MLProject/conda.yaml
           use-mamba: true
 
-
-      # - name: Start MLflow server and run training
-      #   env:
-      #     MLFLOW_TRACKING_URI: http://127.0.0.1:5000
-      #   run: |
-      #     source $(conda info --base)/etc/profile.d/conda.sh
-      #     conda activate depression_env
-
-      #     # Start MLflow server di background
-      #     mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns --host 127.0.0.1 --port 5000 &
-
-      #     # Tunggu sampai server siap (simple sleep, bisa ditingkatkan dengan check port)
-      #     sleep 15
-
-      #     # Run MLflow project dengan tracking uri ke server lokal
-      #     python MLProject/modelling.py --data_path MLProject/student-depression-dataset_preprocessing.csv
-      
-
-      - name: Run training with DAGSHub MLflow tracking
-        env:
-          MLFLOW_TRACKING_URI: https://dagshub.com/Rendika7/Eksperimen_SML_Rendika-nurhartanto-suharto.mlflow
-          DAGSHUB_USER_TOKEN: ${{ secrets.DAGSHUB_USER_TOKEN }}
+      - name: Start MLflow server
         run: |
-          source $(conda info --base)/etc/profile.d/conda.sh
-          conda activate depression_env
+          mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns --host 127.0.0.1 --port 5000 &
+          sleep 15  # tunggu server ready
+
+      - name: Run model training with local MLflow
+        env:
+          MLFLOW_TRACKING_URI: http://127.0.0.1:5000
+        run: |
           python MLProject/modelling.py --data_path MLProject/student-depression-dataset_preprocessing.csv
 
-      - name: Commit and push mlruns to repo
+      - name: Commit and push mlruns folder
         run: |
           if [ -d "mlruns" ]; then
             git config user.name "${{ github.actor }}"
@@ -69,7 +50,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push Docker Image
+      - name: Build and push Docker image
         run: |
           docker build -t rendika7/student-depression-model:latest .
           docker push rendika7/student-depression-model:latest
