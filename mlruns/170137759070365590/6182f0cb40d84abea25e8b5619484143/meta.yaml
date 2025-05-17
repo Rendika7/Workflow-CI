@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/170137759070365590/6182f0cb40d84abea25e8b5619484143/artifacts
+end_time: 1747478746037
+entry_point_name: ''
+experiment_id: '170137759070365590'
+lifecycle_stage: active
+run_id: 6182f0cb40d84abea25e8b5619484143
+run_name: XGBoost
+run_uuid: 6182f0cb40d84abea25e8b5619484143
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747478744242
+status: 3
+tags: []
+user_id: runner

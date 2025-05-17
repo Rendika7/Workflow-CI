@@ -1,0 +1,6 @@
+artifact_location: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/407417787650778434
+creation_time: 1747478755436
+experiment_id: '407417787650778434'
+last_update_time: 1747478755436
+lifecycle_stage: active
+name: Tuning_AdaBoost

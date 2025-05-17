@@ -1,0 +1,6 @@
+artifact_location: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/170137759070365590
+creation_time: 1747478718543
+experiment_id: '170137759070365590'
+last_update_time: 1747478718543
+lifecycle_stage: active
+name: Model_Training_Default_Parameters
