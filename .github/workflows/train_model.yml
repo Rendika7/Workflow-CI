@@ -58,5 +58,5 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t rendika7/student-depression-model:latest .
+          docker build -t rendika7/student-depression-model:latest -f MLProject/Dockerfile .
           docker push rendika7/student-depression-model:latest
