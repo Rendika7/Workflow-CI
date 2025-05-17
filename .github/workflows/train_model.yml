@@ -21,12 +21,13 @@ jobs:
           environment-file: MLProject/conda.yaml
           use-mamba: true
 
-      - name: Start MLflow server
+      - name: Run model training with local MLflow
+        env:
+          MLFLOW_TRACKING_URI: http://127.0.0.1:5000
         run: |
           source $(conda info --base)/etc/profile.d/conda.sh
           conda activate depression_env
-          mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns --host 127.0.0.1 --port 5000 &
-          sleep 15 # Wait for the server to start
+          python MLProject/modelling.py --data_path MLProject/student-depression-dataset_preprocessing.csv
 
       - name: Run model training with local MLflow
         env:
