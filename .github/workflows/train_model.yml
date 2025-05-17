@@ -29,12 +29,6 @@ jobs:
           conda activate depression_env
           python MLProject/modelling.py --data_path MLProject/student-depression-dataset_preprocessing.csv
 
-      - name: Run model training with local MLflow
-        env:
-          MLFLOW_TRACKING_URI: http://127.0.0.1:5000
-        run: |
-          python MLProject/modelling.py --data_path MLProject/student-depression-dataset_preprocessing.csv
-
       - name: Commit and push mlruns folder
         run: |
           if [ -d "mlruns" ]; then
