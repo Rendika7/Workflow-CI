@@ -23,8 +23,10 @@ jobs:
 
       - name: Start MLflow server
         run: |
+          source $(conda info --base)/etc/profile.d/conda.sh
+          conda activate depression_env
           mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns --host 127.0.0.1 --port 5000 &
-          sleep 15  # tunggu server ready
+          sleep 15 # Wait for the server to start
 
       - name: Run model training with local MLflow
         env:
