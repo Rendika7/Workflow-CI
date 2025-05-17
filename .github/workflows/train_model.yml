@@ -32,6 +32,13 @@ jobs:
           conda activate depression_env
           python MLProject/modelling.py --data_path MLProject/student-depression-dataset_preprocessing.csv
 
+      - name: Setup Git LFS
+        run: |
+          sudo apt-get install git-lfs
+          git lfs install
+      - name: Git LFS track
+        run: git lfs track "mlruns/**/model.pkl"
+
       - name: Commit and push mlruns folder
         run: |
           git config user.name "github-actions[bot]"
