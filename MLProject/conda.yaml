@@ -11,6 +11,7 @@ dependencies:
   - psutil
   - scikit-learn
   - scipy
+  - seaborn
   - xgboost
   - lightgbm
   - dagshub
