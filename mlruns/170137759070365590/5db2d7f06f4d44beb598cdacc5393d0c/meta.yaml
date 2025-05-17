@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/170137759070365590/5db2d7f06f4d44beb598cdacc5393d0c/artifacts
+end_time: 1747481971519
+entry_point_name: ''
+experiment_id: '170137759070365590'
+lifecycle_stage: active
+run_id: 5db2d7f06f4d44beb598cdacc5393d0c
+run_name: Naive Bayes
+run_uuid: 5db2d7f06f4d44beb598cdacc5393d0c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747481969834
+status: 3
+tags: []
+user_id: runner

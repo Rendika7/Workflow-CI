@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/170137759070365590/ec483c4b5bfd4c1aba37218059c1d25d/artifacts
+end_time: 1747481969831
+entry_point_name: ''
+experiment_id: '170137759070365590'
+lifecycle_stage: active
+run_id: ec483c4b5bfd4c1aba37218059c1d25d
+run_name: K-Nearest Neighbors
+run_uuid: ec483c4b5bfd4c1aba37218059c1d25d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747481967789
+status: 3
+tags: []
+user_id: runner
