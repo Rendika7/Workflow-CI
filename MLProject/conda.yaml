@@ -1,15 +1,15 @@
-name: depression_env
 channels:
-  - conda-forge
-  - defaults
+- conda-forge
 dependencies:
-  - python=3.8
-  - pip
-  - pip:
-      - pandas
-      - scikit-learn
-      - mlflow
-      - xgboost
-      - lightgbm
-      - dagshub
-      - numpy
+- python=3.9.21
+- pip<=24.3.1
+- pip:
+  - mlflow==2.22.0
+  - cloudpickle==2.2.1
+  - numpy==1.22.4
+  - pandas==1.5.3
+  - psutil==5.9.0
+  - scikit-learn==1.3.2
+  - scipy==1.12.0rc1
+  - xgboost==2.1.4
+name: mlflow-env
