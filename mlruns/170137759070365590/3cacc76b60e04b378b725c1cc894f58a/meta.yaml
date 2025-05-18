@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/170137759070365590/3cacc76b60e04b378b725c1cc894f58a/artifacts
+end_time: 1747569010954
+entry_point_name: ''
+experiment_id: '170137759070365590'
+lifecycle_stage: active
+run_id: 3cacc76b60e04b378b725c1cc894f58a
+run_name: AdaBoost
+run_uuid: 3cacc76b60e04b378b725c1cc894f58a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747569008779
+status: 3
+tags: []
+user_id: runner

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/170137759070365590/db794fc7edf84ae8a059b3ee8841a4a0/artifacts
+end_time: 1747568980469
+entry_point_name: ''
+experiment_id: '170137759070365590'
+lifecycle_stage: active
+run_id: db794fc7edf84ae8a059b3ee8841a4a0
+run_name: Decision Tree
+run_uuid: db794fc7edf84ae8a059b3ee8841a4a0
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747568978761
+status: 3
+tags: []
+user_id: runner

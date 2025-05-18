@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/170137759070365590/165029ab0b094992be343c25ad41d7cf/artifacts
+end_time: 1747568987818
+entry_point_name: ''
+experiment_id: '170137759070365590'
+lifecycle_stage: active
+run_id: 165029ab0b094992be343c25ad41d7cf
+run_name: Gradient Boosting
+run_uuid: 165029ab0b094992be343c25ad41d7cf
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747568984304
+status: 3
+tags: []
+user_id: runner
