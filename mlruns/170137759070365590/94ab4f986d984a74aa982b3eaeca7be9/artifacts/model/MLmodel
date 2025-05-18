@@ -1,0 +1,31 @@
+artifact_path: model
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.8.20
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.3.2
+mlflow_version: 2.17.2
+model_size_bytes: 29047
+model_uuid: 572fb49ce2cc42f7810ec07b753265cd
+run_id: 94ab4f986d984a74aa982b3eaeca7be9
+signature:
+  inputs: '[{"type": "long", "name": "SuicidalThoughtsHistory", "required": true},
+    {"type": "double", "name": "AcademicsPressure", "required": true}, {"type": "double",
+    "name": "FinancialStress", "required": true}, {"type": "double", "name": "CGPA",
+    "required": true}, {"type": "double", "name": "Age", "required": true}, {"type":
+    "long", "name": "City", "required": true}, {"type": "double", "name": "WorkStudyHours",
+    "required": true}, {"type": "double", "name": "StudySatisfaction", "required":
+    true}, {"type": "long", "name": "EatingHabits", "required": true}, {"type": "long",
+    "name": "SleepDuration", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+utc_time_created: '2025-05-18 10:58:41.989407'
