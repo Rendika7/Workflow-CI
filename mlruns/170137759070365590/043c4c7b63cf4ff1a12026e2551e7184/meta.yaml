@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/170137759070365590/043c4c7b63cf4ff1a12026e2551e7184/artifacts
+end_time: 1747563181137
+entry_point_name: ''
+experiment_id: '170137759070365590'
+lifecycle_stage: active
+run_id: 043c4c7b63cf4ff1a12026e2551e7184
+run_name: LightGBM
+run_uuid: 043c4c7b63cf4ff1a12026e2551e7184
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747563179207
+status: 3
+tags: []
+user_id: runner

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/170137759070365590/087681deaa944f61b28c1c17562f88eb/artifacts
+end_time: 1747563184739
+entry_point_name: ''
+experiment_id: '170137759070365590'
+lifecycle_stage: active
+run_id: 087681deaa944f61b28c1c17562f88eb
+run_name: Extra Trees
+run_uuid: 087681deaa944f61b28c1c17562f88eb
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747563181139
+status: 3
+tags: []
+user_id: runner

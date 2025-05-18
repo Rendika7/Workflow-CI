@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/170137759070365590/13b0faac58944be8bc568d8e6e7dc8f1/artifacts
+end_time: 1747563173828
+entry_point_name: ''
+experiment_id: '170137759070365590'
+lifecycle_stage: active
+run_id: 13b0faac58944be8bc568d8e6e7dc8f1
+run_name: SVM
+run_uuid: 13b0faac58944be8bc568d8e6e7dc8f1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747563163448
+status: 3
+tags: []
+user_id: runner

@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/407417787650778434/ead14835c1ab485097be11a423c8d1b8/artifacts
+end_time: 1747563203547
+entry_point_name: ''
+experiment_id: '407417787650778434'
+lifecycle_stage: active
+run_id: ead14835c1ab485097be11a423c8d1b8
+run_name: Tuning_AdaBoost
+run_uuid: ead14835c1ab485097be11a423c8d1b8
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747563188713
+status: 3
+tags: []
+user_id: runner

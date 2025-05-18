@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1747563203534
+current_stage: None
+description: null
+last_updated_timestamp: 1747563203534
+name: AdaBoost
+run_id: ead14835c1ab485097be11a423c8d1b8
+run_link: null
+source: runs:/ead14835c1ab485097be11a423c8d1b8/AdaBoost_tuned_model
+status: READY
+status_message: null
+storage_location: runs:/ead14835c1ab485097be11a423c8d1b8/AdaBoost_tuned_model
+user_id: null
+version: 5
