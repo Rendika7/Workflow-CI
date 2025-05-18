@@ -31,8 +31,8 @@ def main(data_path):
     mlflow.set_experiment("Model_Training_Default_Parameters")
 
     # Load and encode dataset
-    dataPath = 'MLProject/student-depression-dataset_preprocessing.csv'
-    df = pd.read_csv(dataPath)
+    # data_path sudah ada dari passingan argumen --data_path yang dikirim dari luar
+    df = pd.read_csv(data_path)
     label_encoder = LabelEncoder()
     categorical_columns = df.select_dtypes(include=['object']).columns
 
