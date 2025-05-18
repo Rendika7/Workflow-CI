@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/170137759070365590/48aa1cdf40cf41d0982ec3b6a987d5af/artifacts
+end_time: 1747573349272
+entry_point_name: ''
+experiment_id: '170137759070365590'
+lifecycle_stage: active
+run_id: 48aa1cdf40cf41d0982ec3b6a987d5af
+run_name: Logistic Regression
+run_uuid: 48aa1cdf40cf41d0982ec3b6a987d5af
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747573347257
+status: 3
+tags: []
+user_id: runner

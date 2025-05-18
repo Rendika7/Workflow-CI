@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/170137759070365590/522e92ff82fa4cd6ae0506e556b81ffe/artifacts
+end_time: 1747573383301
+entry_point_name: ''
+experiment_id: '170137759070365590'
+lifecycle_stage: active
+run_id: 522e92ff82fa4cd6ae0506e556b81ffe
+run_name: Ridge Classifier
+run_uuid: 522e92ff82fa4cd6ae0506e556b81ffe
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747573381646
+status: 3
+tags: []
+user_id: runner
