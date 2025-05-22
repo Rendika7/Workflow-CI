@@ -33,19 +33,16 @@ jobs:
           conda activate depression_env
           mlflow run ./MLProject -P data_path=student-depression-dataset_preprocessing.csv
 
-      - name: Get latest run ID
-        id: get_run_id
+      - name: Get latest MLflow run_id
         run: |
-          source $(conda info --base)/etc/profile.d/conda.sh
-          conda activate depression_env
-          EXPERIMENT_ID=$(mlflow experiments list | grep Model_Training_Default_Parameters | awk '{print $1}')
-          RUN_ID=$(mlflow runs list --experiment-id $EXPERIMENT_ID --max-results 1 --order-by attribute.start_time DESC --output json | jq -r '.[0].run_id')
-          echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
+          RUN_ID=$(ls -td mlruns/0/*/ | head -n 1 | cut -d'/' -f3)
+          echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
+          echo "Latest run_id: $RUN_ID"
 
-      - name: Generate Dockerfile for serving model
+      # Build Docker Model
+      - name: Build Docker Model
         run: |
-          mkdir -p docker_serving
-          mlflow models generate-dockerfile -m runs:/${{ steps.get_run_id.outputs.run_id }}/model -n student_depression_model -d docker_serving
+          mlflow models build-docker --model-uri "runs:/$RUN_ID/model" --name "cc"
 
       - name: Setup Git LFS
         run: |
@@ -72,6 +69,5 @@ jobs:
 
       - name: Build and push MLflow model Docker image
         run: |
-          cd docker_serving
           docker build -t student-depression-model .
           docker push student-depression-model
