@@ -55,12 +55,17 @@ def main(data_path):
         model_results = {}
 
         for name, model in models.items():
+            # Explicitly log model-specific parameters to avoid conflicts
+            params = model.get_params()
+            for param, value in params.items():
+                if param == 'max_features' and value != None:
+                    mlflow.log_param(param, value) 
+            
             model.fit(X_train, y_train)
             y_pred = model.predict(X_test)
 
             signature = infer_signature(X_test, y_pred)
             mlflow.sklearn.log_model(model, artifact_path=f"model_{name.replace(' ', '_')}", signature=signature)
-            mlflow.log_params(model.get_params())
 
             accuracy = accuracy_score(y_test, y_pred)
             f1 = f1_score(y_test, y_pred, average='weighted')
