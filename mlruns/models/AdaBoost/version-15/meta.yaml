@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1747956180588
+current_stage: None
+description: null
+last_updated_timestamp: 1747956180588
+name: AdaBoost
+run_id: 9bcb10b2472343ff87b9fc0744de753b
+run_link: null
+source: runs:/9bcb10b2472343ff87b9fc0744de753b/model
+status: READY
+status_message: null
+storage_location: runs:/9bcb10b2472343ff87b9fc0744de753b/model
+user_id: null
+version: 15
