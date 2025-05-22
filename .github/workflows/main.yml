@@ -24,18 +24,30 @@ jobs:
           environment-file: MLProject/conda.yaml
           use-mamba: true
 
-      - name: Run model training with local MLflow
-        env:
-          MLFLOW_TRACKING_URI: http://127.0.0.1:5000
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Run model training with mlflow run
         run: |
-          source $(conda info --base)/etc/profile.d/conda.sh
-          conda activate depression_env
-          python MLProject/modelling.py --data_path MLProject/student-depression-dataset_preprocessing.csv
+          mlflow run MLProject --experiment-name "Model_Training_Default_Parameters" --env-manager=local --param data_path=MLProject/student-depression-dataset_preprocessing.csv
+
+      - name: Get latest run ID
+        id: get_run_id
+        run: |
+          EXPERIMENT_ID=$(mlflow experiments list | grep Model_Training_Default_Parameters | awk '{print $1}')
+          RUN_ID=$(mlflow runs list --experiment-id $EXPERIMENT_ID --max-results 1 --order-by attribute.start_time DESC --output json | jq -r '.[0].run_id')
+          echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
+
+      - name: Generate Dockerfile for serving model
+        run: |
+          mkdir -p docker_serving
+          mlflow models generate-dockerfile -m runs:/${{ steps.get_run_id.outputs.run_id }}/model -n student_depression_model -d docker_serving
 
       - name: Setup Git LFS
         run: |
           sudo apt-get install git-lfs
           git lfs install
+
       - name: Git LFS track
         run: git lfs track "mlruns/**/model.pkl"
 
@@ -48,15 +60,14 @@ jobs:
           git commit -m "Save mlruns from CI run" || echo "No changes to commit"
           git push origin HEAD:${{ github.ref_name }}
 
-
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
+      - name: Build and push MLflow model Docker image
         run: |
-          docker build -t rendika7/student-depression-model:latest -f MLProject/Dockerfile .
-          docker push rendika7/student-depression-model:latest
+          cd docker_serving
+          docker build -t student-depression-model .
+          docker push student-depression-model
