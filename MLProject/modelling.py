@@ -67,61 +67,60 @@ def main(data_path):
     model_results = {}
 
     for name, model in models.items():
-        with mlflow.start_run(run_name=name):
-            model.fit(X_train, y_train)
-            y_pred = model.predict(X_test)
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
 
-            # === Log model and signature ===
-            signature = infer_signature(X_test, y_pred)
-            mlflow.sklearn.log_model(model, "model", signature=signature)
+        # === Log model and signature ===
+        signature = infer_signature(X_test, y_pred)
+        mlflow.sklearn.log_model(model, "model", signature=signature)
 
-            # === Log parameters cleanly ===
-            mlflow.log_params(model.get_params())
+        # === Log parameters cleanly ===
+        mlflow.log_params(model.get_params())
 
-            # === Log clean metrics ===
-            accuracy = accuracy_score(y_test, y_pred)
-            f1 = f1_score(y_test, y_pred, average='weighted')
-            precision = precision_score(y_test, y_pred, average='weighted', zero_division=0)
-            recall = recall_score(y_test, y_pred, average='weighted', zero_division=0)
+        # === Log clean metrics ===
+        accuracy = accuracy_score(y_test, y_pred)
+        f1 = f1_score(y_test, y_pred, average='weighted')
+        precision = precision_score(y_test, y_pred, average='weighted', zero_division=0)
+        recall = recall_score(y_test, y_pred, average='weighted', zero_division=0)
 
-            mlflow.log_metric("accuracy", accuracy)
-            mlflow.log_metric("f1_score", f1)
-            mlflow.log_metric("precision", precision)
-            mlflow.log_metric("recall", recall)
+        mlflow.log_metric("accuracy", accuracy)
+        mlflow.log_metric("f1_score", f1)
+        mlflow.log_metric("precision", precision)
+        mlflow.log_metric("recall", recall)
 
-            # === Log classification report per label ===
-            class_report = classification_report(y_test, y_pred, output_dict=True)
-            for label in class_report.keys():
-                if label.isdigit():
-                    mlflow.log_metric(f"precision_label_{label}", class_report[label]['precision'])
-                    mlflow.log_metric(f"recall_label_{label}", class_report[label]['recall'])
+        # === Log classification report per label ===
+        class_report = classification_report(y_test, y_pred, output_dict=True)
+        for label in class_report.keys():
+            if label.isdigit():
+                mlflow.log_metric(f"precision_label_{label}", class_report[label]['precision'])
+                mlflow.log_metric(f"recall_label_{label}", class_report[label]['recall'])
 
-            # === Confusion matrix plot ===
-            cm = confusion_matrix(y_test, y_pred)
-            plt.figure(figsize=(8, 6))
-            sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
-            plt.title("Confusion Matrix")
-            plt.xlabel("Predicted")
-            plt.ylabel("Actual")
-            plt.savefig("conf_matrix.png")
-            mlflow.log_artifact("conf_matrix.png")
-            plt.close()
+        # === Confusion matrix plot ===
+        cm = confusion_matrix(y_test, y_pred)
+        plt.figure(figsize=(8, 6))
+        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+        plt.title("Confusion Matrix")
+        plt.xlabel("Predicted")
+        plt.ylabel("Actual")
+        plt.savefig("conf_matrix.png")
+        mlflow.log_artifact("conf_matrix.png")
+        plt.close()
 
-            # === Log training data as artifact ===
-            mlflow.log_artifact("train_features.csv")
-            mlflow.log_artifact("train_labels.csv")
+        # === Log training data as artifact ===
+        mlflow.log_artifact("train_features.csv")
+        mlflow.log_artifact("train_labels.csv")
 
-            # === Log environment ===
-            os.system("pip freeze > requirements.txt")
-            mlflow.log_artifact("requirements.txt")
+        # === Log environment ===
+        os.system("pip freeze > requirements.txt")
+        mlflow.log_artifact("requirements.txt")
 
-            # === Store result for best model comparison ===
-            model_results[name] = {
-                "accuracy": accuracy,
-                "f1_score": f1,
-                "precision": precision,
-                "recall": recall
-            }
+        # === Store result for best model comparison ===
+        model_results[name] = {
+            "accuracy": accuracy,
+            "f1_score": f1,
+            "precision": precision,
+            "recall": recall
+        }
 
     # Show best model summary
     best_model_name = max(model_results, key=lambda k: model_results[k]["accuracy"])
@@ -192,116 +191,114 @@ def main(data_path):
 
     if param_grid:
         mlflow.set_experiment(f"Tuning_{best_model_name.replace(' ', '_')}")
+        # Grid search
+        grid_search = GridSearchCV(best_model, param_grid, cv=5, scoring='accuracy', n_jobs=-1, verbose=1)
+        grid_search.fit(X_train, y_train)
+        best_model_tuned = grid_search.best_estimator_
+        best_params = grid_search.best_params_
 
-        with mlflow.start_run(run_name=f"Tuning_{best_model_name}"):
-            # Grid search
-            grid_search = GridSearchCV(best_model, param_grid, cv=5, scoring='accuracy', n_jobs=-1, verbose=1)
-            grid_search.fit(X_train, y_train)
-            best_model_tuned = grid_search.best_estimator_
-            best_params = grid_search.best_params_
+        # === Log best model + signature ===
+        y_pred = best_model_tuned.predict(X_test)
+        signature = infer_signature(X_test, y_pred)
+        mlflow.sklearn.log_model(best_model_tuned, "model", signature=signature)
 
-            # === Log best model + signature ===
-            y_pred = best_model_tuned.predict(X_test)
-            signature = infer_signature(X_test, y_pred)
-            mlflow.sklearn.log_model(best_model_tuned, "model", signature=signature)
+        # === Log best parameters ===
+        mlflow.log_params(best_params)
 
-            # === Log best parameters ===
-            mlflow.log_params(best_params)
+        # === Evaluate and log metrics ===
+        acc_train = accuracy_score(y_train, best_model_tuned.predict(X_train))
+        acc_test = accuracy_score(y_test, y_pred)
+        f1 = f1_score(y_test, y_pred, average='weighted')
+        precision = precision_score(y_test, y_pred, average='weighted', zero_division=0)
+        recall = recall_score(y_test, y_pred, average='weighted', zero_division=0)
 
-            # === Evaluate and log metrics ===
-            acc_train = accuracy_score(y_train, best_model_tuned.predict(X_train))
-            acc_test = accuracy_score(y_test, y_pred)
-            f1 = f1_score(y_test, y_pred, average='weighted')
-            precision = precision_score(y_test, y_pred, average='weighted', zero_division=0)
-            recall = recall_score(y_test, y_pred, average='weighted', zero_division=0)
+        mlflow.log_metric("tuned_train_accuracy", acc_train)
+        mlflow.log_metric("tuned_test_accuracy", acc_test)
+        mlflow.log_metric("f1_score", f1)
+        mlflow.log_metric("precision", precision)
+        mlflow.log_metric("recall", recall)
 
-            mlflow.log_metric("tuned_train_accuracy", acc_train)
-            mlflow.log_metric("tuned_test_accuracy", acc_test)
-            mlflow.log_metric("f1_score", f1)
-            mlflow.log_metric("precision", precision)
-            mlflow.log_metric("recall", recall)
+        # Per-label metric
+        report = classification_report(y_test, y_pred, output_dict=True)
+        for label in report:
+            if label.isdigit():
+                mlflow.log_metric(f"precision_label_{label}", report[label]['precision'])
+                mlflow.log_metric(f"recall_label_{label}", report[label]['recall'])
 
-            # Per-label metric
-            report = classification_report(y_test, y_pred, output_dict=True)
-            for label in report:
-                if label.isdigit():
-                    mlflow.log_metric(f"precision_label_{label}", report[label]['precision'])
-                    mlflow.log_metric(f"recall_label_{label}", report[label]['recall'])
+        # Confusion matrix artifact
+        cm = confusion_matrix(y_test, y_pred)
+        plt.figure(figsize=(8, 6))
+        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+        plt.title(f"{best_model_name} Confusion Matrix")
+        plt.xlabel("Predicted")
+        plt.ylabel("Actual")
+        plt.savefig("tuned_conf_matrix.png")
+        mlflow.log_artifact("tuned_conf_matrix.png")
+        plt.close()
 
-            # Confusion matrix artifact
-            cm = confusion_matrix(y_test, y_pred)
-            plt.figure(figsize=(8, 6))
-            sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
-            plt.title(f"{best_model_name} Confusion Matrix")
-            plt.xlabel("Predicted")
-            plt.ylabel("Actual")
-            plt.savefig("tuned_conf_matrix.png")
-            mlflow.log_artifact("tuned_conf_matrix.png")
-            plt.close()
+        # Log dataset & requirements
+        mlflow.log_artifact("train_features.csv")
+        mlflow.log_artifact("train_labels.csv")
+        os.system("pip freeze > requirements.txt")
+        mlflow.log_artifact("requirements.txt")
 
-            # Log dataset & requirements
-            mlflow.log_artifact("train_features.csv")
-            mlflow.log_artifact("train_labels.csv")
-            os.system("pip freeze > requirements.txt")
-            mlflow.log_artifact("requirements.txt")
+        print(f"\n🔧 Tuned model: {best_model_name}")
+        print(f"Best Params: {best_params}")
+        print(f"Train Acc: {acc_train:.4f} | Test Acc: {acc_test:.4f} | F1: {f1:.4f}")
+        
+        # === Register the tuned model ===       
 
-            print(f"\n🔧 Tuned model: {best_model_name}")
-            print(f"Best Params: {best_params}")
-            print(f"Train Acc: {acc_train:.4f} | Test Acc: {acc_test:.4f} | F1: {f1:.4f}")
-            
-            # === Register the tuned model ===       
+        #️⃣ Ambil run_id dari run aktif (model hasil tuning)
+        run_id = mlflow.active_run().info.run_id
 
-            #️⃣ Ambil run_id dari run aktif (model hasil tuning)
-            run_id = mlflow.active_run().info.run_id
+        #️⃣ Buat URI model hasil tuning yang sudah dilog di artifacts
+        model_uri = f"runs:/{run_id}/{best_model_name}_tuned_model"
 
-            #️⃣ Buat URI model hasil tuning yang sudah dilog di artifacts
-            model_uri = f"runs:/{run_id}/{best_model_name}_tuned_model"
+        #️⃣ Inisialisasi MLflow client untuk interaksi dengan model registry
+        client = MlflowClient()
 
-            #️⃣ Inisialisasi MLflow client untuk interaksi dengan model registry
-            client = MlflowClient()
+        #️⃣ Ubah nama model agar tidak mengandung spasi (wajib untuk registry)
+        model_name = best_model_name.replace(" ", "_")
 
-            #️⃣ Ubah nama model agar tidak mengandung spasi (wajib untuk registry)
-            model_name = best_model_name.replace(" ", "_")
+        #️⃣ ===== REGISTER MODEL HASIL TUNING =====
+        try:
+            # Daftarkan model ke model registry (hanya jika belum pernah didaftarkan)
+            client.create_registered_model(model_name)
+        except Exception as e:
+            print(f"Model '{model_name}' sudah terdaftar. Melanjutkan...")
 
-            #️⃣ ===== REGISTER MODEL HASIL TUNING =====
-            try:
-                # Daftarkan model ke model registry (hanya jika belum pernah didaftarkan)
-                client.create_registered_model(model_name)
-            except Exception as e:
-                print(f"Model '{model_name}' sudah terdaftar. Melanjutkan...")
+        #️⃣ Daftarkan versi baru dari model hasil tuning
+        model_version = client.create_model_version(
+            name=model_name,
+            source=model_uri,
+            run_id=run_id
+        )
 
-            #️⃣ Daftarkan versi baru dari model hasil tuning
-            model_version = client.create_model_version(
-                name=model_name,
-                source=model_uri,
-                run_id=run_id
-            )
+        print(f"✅ Registered model version: {model_version.version} for model '{model_name}'")
 
-            print(f"✅ Registered model version: {model_version.version} for model '{model_name}'")
+        #️⃣ ===== COPY VERSI MODEL DAN PROMOSI KE PRODUCTION =====
 
-            #️⃣ ===== COPY VERSI MODEL DAN PROMOSI KE PRODUCTION =====
+        # Ambil informasi versi model yang baru saja dibuat
+        existing_version_info = client.get_model_version(name=model_name, version=model_version.version)
+        existing_model_source = existing_version_info.source
 
-            # Ambil informasi versi model yang baru saja dibuat
-            existing_version_info = client.get_model_version(name=model_name, version=model_version.version)
-            existing_model_source = existing_version_info.source
+        #️⃣ Duplikat model version dari sumber yang sama (tanpa run_id agar independen)
+        new_version = client.create_model_version(
+            name=model_name,
+            source=existing_model_source,
+            run_id=None  # Copy tanpa dependensi ke run spesifik
+        )
 
-            #️⃣ Duplikat model version dari sumber yang sama (tanpa run_id agar independen)
-            new_version = client.create_model_version(
-                name=model_name,
-                source=existing_model_source,
-                run_id=None  # Copy tanpa dependensi ke run spesifik
-            )
+        print(f"🌀 Created duplicate model version: {new_version.version}")
 
-            print(f"🌀 Created duplicate model version: {new_version.version}")
+        #️⃣ Promosikan versi baru ke stage "Production"
+        client.transition_model_version_stage(
+            name=model_name,
+            version=new_version.version,
+            stage="Production"
+        )
 
-            #️⃣ Promosikan versi baru ke stage "Production"
-            client.transition_model_version_stage(
-                name=model_name,
-                version=new_version.version,
-                stage="Production"
-            )
-
-            print(f"🚀 Model version {new_version.version} is now in PRODUCTION stage ✅")
+        print(f"🚀 Model version {new_version.version} is now in PRODUCTION stage ✅")
             
     else:
         print(f"No hyperparameter grid available for {best_model_name}, skipping tuning.")
