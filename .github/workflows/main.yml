@@ -31,8 +31,7 @@ jobs:
         run: |
           source $(conda info --base)/etc/profile.d/conda.sh
           conda activate depression_env
-          mlflow run MLProject --experiment-name "Model_Training_Default_Parameters" --env-manager=local -P data_path=student-depression-dataset_preprocessing.csv
-
+          mlflow run MLproject --env-manager=local -P data_path=student-depression-dataset_preprocessing.csv
 
       - name: Get latest run ID
         id: get_run_id
