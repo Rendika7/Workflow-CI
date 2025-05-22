@@ -19,7 +19,7 @@ jobs:
       - name: Setup conda environment
         uses: conda-incubator/setup-miniconda@v2
         with:
-          python-version: 3.8
+          python-version: 3.9.21
           activate-environment: depression_env
           environment-file: MLProject/conda.yaml
           use-mamba: true
