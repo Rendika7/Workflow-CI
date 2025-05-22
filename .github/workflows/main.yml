@@ -68,7 +68,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push MLflow model Docker image
+      - name: push MLflow model Docker image to Docker Hub
         run: |
-          docker build -t student-depression-model .
-          docker push student-depression-model
+          docker push student-depression-classifier
