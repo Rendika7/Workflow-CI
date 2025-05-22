@@ -21,9 +21,6 @@ from sklearn.preprocessing import LabelEncoder
 
 
 def main(data_path):
-    if mlflow.active_run() is None:
-        mlflow.set_experiment("Model_Training_Default_Parameters")
-
     # Use the active run context
     with mlflow.start_run() as run:  # This will reuse the existing run if active
         print(f"Active run ID: {run.info.run_id}")
@@ -160,7 +157,6 @@ def main(data_path):
         }
 
         if best_model_name in param_grids:
-            mlflow.set_experiment(f"Tuning_{best_model_name.replace(' ', '_')}")
             best_model = models[best_model_name]
             param_grid = param_grids[best_model_name]
 
