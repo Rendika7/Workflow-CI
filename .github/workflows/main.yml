@@ -31,7 +31,6 @@ jobs:
         run: |
           source $(conda info --base)/etc/profile.d/conda.sh
           conda activate depression_env
-          export MLFLOW_TRACKING_URI=http://127.0.0.1:5000
           mlflow run ./MLProject -P data_path=student-depression-dataset_preprocessing.csv
 
       - name: Get latest run ID
