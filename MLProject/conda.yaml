@@ -1,18 +1,18 @@
 channels:
-- conda-forge
+  - conda-forge
 dependencies:
-- python=3.9
-- pip
-- pip:
-  - mlflow
-  - cloudpickle
-  - numpy
-  - pandas
-  - psutil
-  - scikit-learn
-  - scipy
-  - seaborn
-  - xgboost
-  - lightgbm
-  - dagshub
+  - python=3.9
+  - pip
+  - pip:
+      - mlflow
+      - cloudpickle
+      - numpy
+      - pandas
+      - psutil
+      - scikit-learn
+      - scipy
+      - seaborn
+      - xgboost
+      - lightgbm
+      - dagshub
 name: depression_env
